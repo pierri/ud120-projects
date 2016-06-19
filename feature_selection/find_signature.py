@@ -39,5 +39,20 @@ labels_train   = labels_train[:150]
 
 ### your code goes here
 
+from sklearn import tree
+clf = tree.DecisionTreeClassifier(min_samples_split=40)
+clf = clf.fit(features_train, labels_train)
 
+pred = clf.predict(features_test)
 
+from sklearn.metrics import accuracy_score
+print "Accuracy:", accuracy_score(labels_test, pred)
+
+print "Importance of the most important feature:",
+import numpy as np
+ind = np.argmax(clf.feature_importances_)
+print clf.feature_importances_[ind]
+print "Number of the most important feature:",
+print ind
+print "Word causing most discrimination of decision tree:",
+print vectorizer.get_feature_names()[ind]
