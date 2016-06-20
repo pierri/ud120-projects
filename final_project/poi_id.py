@@ -10,19 +10,38 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary'] # You will need to use more features
+features_list = ['poi', 'deferral_payments', 'director_fees'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
 
 ### Task 2: Remove outliers
+big_salaries = {name: features for name, features in data_dict.iteritems() if (features["salary"] != "NaN" and features["salary"] > 25000000)} 
+outlier_key = big_salaries.keys()[0] # TOTAL
+data_dict.pop(outlier_key, 0)
+
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
 
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
+
+
+import matplotlib.pyplot
+for point in data:
+    if (point[0] == 1): # POI
+        color = "r"
+    else: # non-POI
+        color = "b"
+    matplotlib.pyplot.scatter(point[1], point[2], color = color)
+
+matplotlib.pyplot.xlabel(features_list[1])
+matplotlib.pyplot.ylabel(features_list[2])
+matplotlib.pyplot.show()
+
+
 labels, features = targetFeatureSplit(data)
 
 ### Task 4: Try a varity of classifiers
